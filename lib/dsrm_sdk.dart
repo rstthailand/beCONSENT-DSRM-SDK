@@ -8,6 +8,8 @@ import 'package:dsrm_sdk/model/dsrm_data.dart';
 import 'package:dsrm_sdk/model/rightreq.dart';
 
 late Dsrm_data _d;
+String title = '';
+String des = '';
 
 show(var context) {
   Future.delayed(
@@ -18,6 +20,13 @@ show(var context) {
                 future: getData(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
+                    if (_d.defaultLanguage == 'th') {
+                      title = _d.title.th;
+                      des = _d.description.th;
+                    } else {
+                      title = _d.title.en;
+                      des = _d.description.en;
+                    }
                     return dsrm();
                   }
                   return const Center(
@@ -138,12 +147,21 @@ class _dsrm_State extends State<dsrm> {
     if (rightReq.isNotEmpty) {
     } else {
       for (var i in _d.rightRequests) {
-        RightReq r = RightReq(
-            title: i.rightRequestName.th,
-            isSelected: isSelected,
-            req: i.options,
-            id: i.id);
-        rightReq.add(r);
+        if (_d.defaultLanguage == 'th') {
+          RightReq r = RightReq(
+              title: i.rightRequestName.th,
+              isSelected: isSelected,
+              req: i.options,
+              id: i.id);
+          rightReq.add(r);
+        } else {
+          RightReq r = RightReq(
+              title: i.rightRequestName.en,
+              isSelected: isSelected,
+              req: i.options,
+              id: i.id);
+          rightReq.add(r);
+        }
       }
     }
   }
@@ -182,15 +200,13 @@ class _dsrm_State extends State<dsrm> {
                     children: [
                       Align(
                         child: Text(
-                          _d.title.th,
+                          title,
                           style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         alignment: Alignment.centerLeft,
                       ),
-                      Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(_d.description.th))
+                      Align(alignment: Alignment.centerLeft, child: Text(des))
                     ],
                   )),
               Padding(
