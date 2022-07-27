@@ -115,22 +115,22 @@ class _dsrm_State extends State<dsrm> {
                       child: Text('Close'))
                 ],
               ));
-    }
-    if (RightRequestID == 0) {
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: Text('Please Select right request'),
-                actions: [
-                  OutlinedButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: Text('Close'))
-                ],
-              ));
     } else {
-      print("press submit");
-      send_info();
-      Navigator.of(context).pop();
+      if (RightRequestID == 0) {
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: Text('Please Select right request'),
+                  actions: [
+                    OutlinedButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text('Close'))
+                  ],
+                ));
+      } else {
+        send_info();
+        Navigator.of(context).pop();
+      }
     }
   }
 
