@@ -31,6 +31,7 @@ Future getData() async {
   final url = Uri.parse(
       "http://dev.beconsent.tech/api/v1/03a29a62-eb39-4d7b-895c-7e900d893e37/dsrm-request-form-versions/abb2a9f1-b773-4aa3-9380-594ac63d200f/latest");
   var response = await http.get(url);
+  print(response.body);
   _d = dsrmfromJson(response.body);
 }
 
@@ -89,11 +90,13 @@ class _dsrm_State extends State<dsrm> {
       "requestedAttachment": "<file-url>",
       "collectionChannel": "Mobile App"
     };
+    //
     var body = json.encode(args);
 
     var response = await http
         .post(url, body: body, headers: {'Content-type': 'application/json'});
     print(response.statusCode);
+    print(response.body);
   }
 
   void submit() {
@@ -154,7 +157,10 @@ class _dsrm_State extends State<dsrm> {
           _isCheck = List<bool>.filled(option.length, false);
           RightRequestID = i.id;
         });
-      } else {}
+        // return Text(name);
+      } else {
+        // return Text('');
+      }
     }
   }
 
@@ -170,27 +176,39 @@ class _dsrm_State extends State<dsrm> {
           ),
           child: Column(
             children: [
-              Column(
-                children: [
-                  Text(
-                    _d.title.th,
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  Text(_d.description.th)
-                ],
-              ),
               Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: EdgeInsets.all(25),
+                  child: Column(
+                    children: [
+                      Align(
+                        child: Text(
+                          _d.title.th,
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        alignment: Alignment.centerLeft,
+                      ),
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(_d.description.th))
+                    ],
+                  )),
+              Padding(
+                  padding: const EdgeInsets.only(left: 25, right: 25),
                   child: Column(
                     children: const [
-                      Text(
-                        "Identity Validation",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                          "In order to validation your or the data subject on whose behalf you write to us request,"
-                          "we need to verify your identity. Please fill out thr form below"),
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Identity Validation",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          )),
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                              "In order to validation your or the data subject on whose behalf you write to us request,"
+                              "we need to verify your identity. Please fill out thr form below")),
                     ],
                   )),
               Center(
@@ -353,32 +371,37 @@ class _dsrm_State extends State<dsrm> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        name,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
+                      Align(
+                        child: Text(
+                          name,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        alignment: Alignment.centerLeft,
                       ),
                       SizedBox(
                         height: 8,
                       ),
-                      Text(
-                        '',
-                        style: TextStyle(fontSize: 16),
-                      )
+                      // Align(
+                      //   alignment: Alignment.centerLeft,
+                      //    child: Text('',style: TextStyle(fontSize: 16),))
                     ],
                   )),
               ListView.builder(
                   shrinkWrap: true,
                   itemCount: option.length,
                   itemBuilder: (context, i) {
-                    return CheckboxListTile(
-                        title: Text(option[i].name.th),
+                    return ListTile(
+                      leading: Checkbox(
                         value: _isCheck[i],
-                        onChanged: (Nval) {
+                        onChanged: (value) {
                           setState(() {
-                            _isCheck[i] = Nval!;
+                            _isCheck[i] = value!;
                           });
-                        });
+                        },
+                      ),
+                      title: Text(option[i].name.th),
+                    );
                   }),
               Padding(
                   padding: const EdgeInsets.all(25),
@@ -393,7 +416,8 @@ class _dsrm_State extends State<dsrm> {
                   children: [
                     Text(
                       "Describe in Detail",
-                      style: TextStyle(fontSize: 16),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
                       height: 8,
