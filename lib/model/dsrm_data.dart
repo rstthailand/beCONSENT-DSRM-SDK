@@ -1,8 +1,8 @@
 import 'dart:convert';
-Dsrm_data dsrmfromJson(String str) => Dsrm_data.fromJson(json.decode(str));
+DSRM dsrmfromJson(String str) => DSRM.fromJson(json.decode(str));
 
-class Dsrm_data {
-  Dsrm_data({
+class DSRM {
+  DSRM({
     required this.id,
     required this.uuid,
     required this.title,
@@ -29,7 +29,7 @@ class Dsrm_data {
   late final int workspaceId;
   late final int dsrmRequestFormId;
 
-  Dsrm_data.fromJson(Map<String, dynamic> json){
+  DSRM.fromJson(Map<String, dynamic> json){
     id = json['id'];
     uuid = json['uuid'];
     title = Title.fromJson(json['title']);

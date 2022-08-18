@@ -7,9 +7,23 @@ import 'package:http/http.dart' as http;
 import 'package:dsrm_sdk/model/dsrm_data.dart';
 import 'package:dsrm_sdk/model/rightreq.dart';
 
-late Dsrm_data _d;
+late DSRM _d;
+
+String _url = "";
 String title = '';
 String des = '';
+
+Future getData() async {
+  final uri = Uri.parse(_url);
+  var response = await http.get(uri);
+  print(response.body);
+  _d = dsrmfromJson(response.body);
+}
+
+init(String url) {
+  _url = url;
+  getData();
+}
 
 show(var context) {
   Future.delayed(
@@ -27,7 +41,7 @@ show(var context) {
                       title = _d.title.en;
                       des = _d.description.en;
                     }
-                    return dsrm();
+                    return DSRMPWidget();
                   }
                   return const Center(
                     child: CircularProgressIndicator(),
@@ -36,22 +50,15 @@ show(var context) {
           ));
 }
 
-Future getData() async {
-  final url = Uri.parse(
-      "http://dev.beconsent.tech/api/v1/1b73d1ac-4eff-4e13-9238-55dd8ed1e990/dsrm-request-form-versions/26b948a3-a80f-4818-9241-366f6f5b84c6/latest");
-  var response = await http.get(url);
-  print(response.body);
-  _d = dsrmfromJson(response.body);
-}
+class DSRMPWidget extends StatefulWidget {
 
-class dsrm extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _dsrm_State();
+    return DSRMState();
   }
 }
 
-class _dsrm_State extends State<dsrm> {
+class DSRMState extends State<DSRMPWidget> {
   List<RightReq> rightReq = [];
   List<Options> option = [];
   List<bool> _isCheck = [];
@@ -61,13 +68,6 @@ class _dsrm_State extends State<dsrm> {
   final LastName = TextEditingController();
   final Email = TextEditingController();
   final County = TextEditingController();
-  @override
-  void initState() {
-    getData();
-    add_index();
-    check(rightReq);
-    super.initState();
-  }
 
   bool isSelected = false;
 
@@ -180,6 +180,14 @@ class _dsrm_State extends State<dsrm> {
         // return Text('');
       }
     }
+  }
+
+  @override
+  void initState() {
+    getData();
+    add_index();
+    check(rightReq);
+    super.initState();
   }
 
   @override
